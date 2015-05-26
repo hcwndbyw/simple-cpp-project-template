@@ -10,3 +10,9 @@ target_link_libraries( Main
     Calc
     ${Boost_LIBRARIES}
 )
+
+add_custom_command(
+    TARGET Main
+    POST_BUILD
+    COMMAND AllTests
+)

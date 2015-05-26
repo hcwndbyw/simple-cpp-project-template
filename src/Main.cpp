@@ -1,8 +1,9 @@
 #include "Calc.h"
 #include <iostream>
 
-main()
+int main()
 {
     Calc calc;
     std::cout << calc.Add(1, 1) << "\n";
+    return 0;
 }

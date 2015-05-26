@@ -1,10 +1,12 @@
 #! /bin/bash
 
-# assumes this is executed from the build dir
-cd ..
-if [ ! -d gtest-1.7.0 ]; then
-    wget http://googletest.googlecode.com/files/gtest-1.7.0.zip
-    unzip gtest-1.7.0.zip
-    rm gtest-1.7.0.zip
+GTEST="gtest-1.7.0"
+
+pushd "$(git rev-parse --show-toplevel)"
+if [ ! -d  "$GTEST" ]; then
+    echo "Downloading $GTEST"
+    wget http://googletest.googlecode.com/files/"$GTEST".zip
+    unzip "$GTEST".zip
+    rm "$GTEST".zip
 fi
-cd build
+popd
