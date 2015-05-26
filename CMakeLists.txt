@@ -8,7 +8,7 @@ find_package( Boost REQUIRED )
 include_directories( ${Boost_INCLUDE_DIR} )
 
 # ensure that we have gtest
-execute_process( COMMAND cmd /c "../scripts/SetupGtest.sh" )
+execute_process( COMMAND "../scripts/SetupGtest.sh" )
 
 add_subdirectory( src )
 add_subdirectory( gtest-1.7.0 )
