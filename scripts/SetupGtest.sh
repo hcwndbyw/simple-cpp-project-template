@@ -1,11 +1,11 @@
 #! /bin/bash
 
-GTEST="gtest-1.7.0"
+GTEST="gtest-1.8.0"
 
 pushd "$(git rev-parse --show-toplevel)"
 if [ ! -d  "$GTEST" ]; then
     echo "Downloading $GTEST"
-    wget http://googletest.googlecode.com/files/"$GTEST".zip
+    wget https://github.com/google/googletest/archive/release-1.8.0.zip -O "$GTEST".zip
     unzip "$GTEST".zip
     rm "$GTEST".zip
 fi

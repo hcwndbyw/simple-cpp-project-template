@@ -3,10 +3,12 @@
 # Build and gtest dirs 
 build/*
 gtest*/*
+googletest*
 
 # ViM swap files
 *.swp
 *.swo
+*.un~
 
 # Compiled Object files
 *.slo

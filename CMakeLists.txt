@@ -11,7 +11,7 @@ include_directories( ${Boost_INCLUDE_DIR} )
 execute_process( COMMAND "../scripts/SetupGtest.sh" )
 
 add_subdirectory( src )
-add_subdirectory( gtest-1.7.0 )
+add_subdirectory( googletest-release-1.8.0 )
 add_subdirectory( tests )
 
 enable_testing()
