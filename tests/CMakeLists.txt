@@ -1,7 +1,7 @@
 message( STATUS ${CMAKE_SOURCE_DIR} )
 
 include_directories( ${CMAKE_SOURCE_DIR}/src )
-include_directories( ${gtest_SOURCE_DIR}/include)
+include_directories( ${GTEST_INCLUDES} )
 
 set( test_sources 
     CalcTest.cpp )
@@ -11,7 +11,7 @@ add_executable( AllTests
 
 target_link_libraries( AllTests
     Calc
-    gtest_main
+    GTestMain
 )
 
 add_custom_command(
