@@ -1,7 +1,9 @@
 cmake_minimum_required( VERSION 2.6 )
 project( ProjectName )
 
-add_definitions( -std=c++11 -g -Wall)
+add_definitions( -std=c++14 )
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall -O0")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -O3 -O2")
 
 # Set BOOST_ROOT environment variable to point to your local Boost dir.
 find_package( Boost REQUIRED )
@@ -39,6 +41,17 @@ set_target_properties(GTestMain PROPERTIES
         "${GTEST_LIBRARY};${CMAKE_THREAD_LIBS_INIT}")
 
 add_dependencies(GTest GTestExternal)
+
+IF (NOT CMAKE_BUILD_TYPE )
+    SET ( CMAKE_BUILD_TYPE Debug )
+ENDIF()
+
+string(TOUPPER "${CMAKE_BUILD_TYPE}" uppercase_CMAKE_BUILD_TYPE)
+
+message("CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+IF(NOT uppercase_CMAKE_BUILD_TYPE MATCHES "^(DEBUG|RELEASE)$")
+    message(FATAL_ERROR "Unrecognized build flavor. Only Debug and Release are supported.")
+ENDIF()
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
