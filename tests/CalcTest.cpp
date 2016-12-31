@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "Calc.h"
+#include "calc/Calc.h"
 
 class CalcTest : public ::testing::Test
 {
