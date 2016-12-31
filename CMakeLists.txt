@@ -1,4 +1,10 @@
 cmake_minimum_required( VERSION 2.6 )
+message("${CMAKE_SOURCE_DIR}")
+message("${CMAKE_BINARY_DIR}")
+if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+    message(FATAL_ERROR "In-source builds are not  are not permitted. Make a separate folder for building:\n\tmkdir build; cd build; cmake ..\nBefore that, remove the files already created:\n\trm -rf CMakeCache.txt CMakeFiles")
+endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+
 project( ProjectName )
 
 add_definitions( -std=c++14 )
