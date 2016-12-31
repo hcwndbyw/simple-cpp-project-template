@@ -68,7 +68,7 @@ add_subdirectory( tests )
 
 enable_testing()
 add_test(test
-        tests/AllTests)
+        bin/AllTests)
 
 add_custom_target(loop
     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/LoopBuild.sh)
