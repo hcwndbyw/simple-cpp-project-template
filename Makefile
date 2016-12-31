@@ -2,7 +2,7 @@ SHELL := /bin/bash
 RM    := rm -rf
 MKDIR := mkdir -p
 
-.PHONY: default debug release distclean clean-debug clean-release
+.PHONY: default debug release distclean clean-debug clean-release test-debug test-release
 default: debug ;
 
 debug:
@@ -22,7 +22,15 @@ distclean:
 clean: clean-debug clean-release
 
 clean-debug:
-	@ if [ -d "./debug"  ]; then cd debug > /dev/null 2>&1 && make -s clean; fi
+	@ if [ -d "./debug"  ]; then cd debug > /dev/null 2>&1 && $(MAKE) -s clean; fi
 
 clean-release:
-	@ if [ -d "./release"  ]; then cd release > /dev/null 2>&1 && make -s clean; fi
+	@ if [ -d "./release"  ]; then cd release > /dev/null 2>&1 && $(MAKE) -s clean; fi
+
+test-all: test-debug test-release
+
+test-debug: debug
+	@ $(MAKE) -s test -C debug
+
+test-release: release
+	@ $(MAKE) -s test -C release
