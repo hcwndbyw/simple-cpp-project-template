@@ -2,8 +2,8 @@
 
 # Build and gtest dirs 
 build/*
-gtest*/*
-googletest*
+debug/*
+release/*
 
 # ViM swap files
 *.swp
