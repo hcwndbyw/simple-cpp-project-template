@@ -8,8 +8,6 @@ endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 project( ProjectName )
 
 add_definitions( -std=c++14 )
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall -O0")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -O3 -O2")
 
 # Set BOOST_ROOT environment variable to point to your local Boost dir.
 find_package( Boost REQUIRED )
@@ -63,12 +61,13 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_subdirectory( src )
-add_subdirectory( tests )
+set(TEST_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests/lib)
+set(TEST_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests/lib)
+set(TEST_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests/bin)
 
 enable_testing()
-add_test(test
-        bin/AllTests)
+
+add_subdirectory( src )
 
 add_custom_target(loop
     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/LoopBuild.sh)
