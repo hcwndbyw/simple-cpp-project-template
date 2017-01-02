@@ -49,7 +49,37 @@ def add_dir_to_root_cmakelists(name, under):
 
 
 def build_target_link_lines(target_name, to_link):
-    def indent(s):
+    def get_all_prefixes(value, cutoff=''):
+        pre = []
+        for i in range(len(value) + 1, -1, -1):
+            v = value[:i]
+            if v == cutoff:
+                break
+            pre.append(v)
+        return pre
+
+    def format(s):
+        if ':' in s:
+            split = s.split(':', 1)
+            if not split[0]:
+                print_error('Malformed link library: {}'.format(s))
+                sys.exit(1)
+            # this isn't pretty, but it sure gets the job done
+            pri_opt = get_all_prefixes('PRIVATE', 'P')
+            pub_opt = get_all_prefixes('PUBLIC', 'P')
+            ifc_opt = get_all_prefixes('INTERFACE')
+            dep = split[0].upper()
+            if dep in pri_opt:
+                dep = 'PRIVATE'
+            elif dep in pub_opt:
+                dep = 'PUBLIC'
+            elif dep in ifc_opt:
+                dep = 'INTERFACE'
+            else:
+                print_error('Malformed link library: {}'.format(s))
+                sys.exit(1)
+
+            s = '{} {}'.format(dep, split[1])
         return '    {}'.format(s)
 
     target_link_libs_template = "target_link_libraries( {}"
@@ -58,7 +88,7 @@ def build_target_link_lines(target_name, to_link):
     if len(to_link) > 0:
         lines.append("")
         lines.append(target_link_libs_template.format(target_name))
-        lines.extend(map(indent, to_link))
+        lines.extend(map(format, to_link))
         lines.append(")")
 
     return lines
@@ -81,7 +111,11 @@ def parse_args(is_lib):
                         You will have to explicitly list source files.')
 
     parser.add_argument('-link', dest='to_link', type=str, nargs='+', default=[],
-                        help='An optional list of libraries to link to.')
+                        help='An optional space delimited list of libraries to link to.\
+                        Libraries listed here may optionally be prefixed with PRIVATE: PUBLIC: or INTERFACE: \
+                        or any non-ambiguous prefix there-of. Casing is ignored\
+                        This will apply that link interface and dependency to that library. For example:\
+                        \t-l foo pri:bar PUBLIC:baz int:ham')
 
     args = parser.parse_args()
 
