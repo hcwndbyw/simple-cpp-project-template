@@ -8,6 +8,7 @@ endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 project( ProjectName )
 
 add_definitions( -std=c++14 )
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set BOOST_ROOT environment variable to point to your local Boost dir.
 find_package( Boost REQUIRED )
