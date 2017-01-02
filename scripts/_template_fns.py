@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import sys
 import os
+import argparse
 
 
 def get_path_of_target_under(target, under):
@@ -45,3 +46,27 @@ def add_dir_to_root_cmakelists(name, under):
 
     with open(path, "a+") as f:
         f.write("add_subdirectory({})".format(name))
+
+
+def parse_args(is_lib):
+    desc = "Generates a new {} under src"
+    if is_lib:
+        desc = desc.format('lib')
+    else:
+        desc = desc.format('executable')
+
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument('name', metavar='name', type=str, nargs=1,
+                        help='Name of lib or bin to create')
+    args = parser.parse_args()
+
+    args.name = args.name[0].lower()
+
+    if component_exists(args.name):
+        typ = "binary"
+        if is_lib:
+            typ = 'lib'
+        print_error("{} {} already exists!".format(typ, args.name))
+        sys.exit(1)
+
+    return args

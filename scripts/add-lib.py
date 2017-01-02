@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import sys
 import _template_fns as tf
 
 
@@ -66,15 +65,8 @@ def build_lines_for_test(lib_name):
 
 
 def main():
-    if len(sys.argv) != 2:
-        tf.print_error("Need a name")
-        return
-
-    lib_name = sys.argv[1].lower()
-
-    if tf.component_exists(lib_name):
-        tf.print_error("library {} already exists!".format(lib_name))
-        return
+    args = tf.parse_args(True)
+    lib_name = args.name
 
     lines = build_lines_for_lib(lib_name)
     tf.create_cmakelists_for_target_under(lib_name, "src", lines)

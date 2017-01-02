@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import sys
 import _template_fns as tf
 
 
@@ -26,15 +25,8 @@ def build_lines_for_bin(bin_name, link):
 
 
 def main():
-    if len(sys.argv) != 2:
-        tf.print_error("Need a name")
-        return
-
-    bin_name = sys.argv[1].lower()
-
-    if tf.component_exists(bin_name):
-        tf.print_error("binary {} already exists!".format(bin_name))
-        return
+    args = tf.parse_args(False)
+    bin_name = args.name
 
     lines = build_lines_for_bin(bin_name, [])
     tf.create_cmakelists_for_target_under(bin_name, "src", lines)
