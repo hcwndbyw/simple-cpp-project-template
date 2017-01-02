@@ -48,6 +48,22 @@ def add_dir_to_root_cmakelists(name, under):
         f.write("add_subdirectory({})\n".format(name))
 
 
+def build_target_link_lines(target_name, to_link):
+    def indent(s):
+        return '    {}'.format(s)
+
+    target_link_libs_template = "target_link_libraries( {}"
+    lines = []
+
+    if len(to_link) > 0:
+        lines.append("")
+        lines.append(target_link_libs_template.format(target_name))
+        lines.extend(map(indent, to_link))
+        lines.append(")")
+
+    return lines
+
+
 def parse_args(is_lib):
     desc = "Generates a new {} under src"
     if is_lib:
@@ -63,6 +79,9 @@ def parse_args(is_lib):
                         action='store_const', const=True, default=False,
                         help='If set, sources for this target will not use globs. \
                         You will have to explicitly list source files.')
+
+    parser.add_argument('-link', dest='to_link', type=str, nargs='+', default=[],
+                        help='An optional list of libraries to link to.')
 
     args = parser.parse_args()
 
