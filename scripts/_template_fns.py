@@ -45,7 +45,7 @@ def add_dir_to_root_cmakelists(name, under):
         sys.exit(1)
 
     with open(path, "a+") as f:
-        f.write("add_subdirectory({})".format(name))
+        f.write("add_subdirectory({})\n".format(name))
 
 
 def parse_args(is_lib):
@@ -58,6 +58,12 @@ def parse_args(is_lib):
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('name', metavar='name', type=str, nargs=1,
                         help='Name of lib or bin to create')
+
+    parser.add_argument('-no-glob', dest='no_glob',
+                        action='store_const', const=True, default=False,
+                        help='If set, sources for this target will not use globs. \
+                        You will have to explicitly list source files.')
+
     args = parser.parse_args()
 
     args.name = args.name[0].lower()

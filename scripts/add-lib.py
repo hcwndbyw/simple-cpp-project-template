@@ -2,11 +2,15 @@
 import _template_fns as tf
 
 
-def build_lines_for_test_cmake(lib_name):
+def build_lines_for_test_cmake(lib_name, no_glob):
+    files = "file(GLOB {}_TEST_SOURCES ./*.cpp ./*.c ./*.cxx )".format(lib_name.upper())
+    if no_glob:
+        files = "set( {}_TEST_SOURCES\n    {}_test.cpp\n    # Add new source files here\n)".format(lib_name.upper(),
+                                                                                                   lib_name)
     lines = [
         "include_directories( ${CMAKE_SOURCE_DIR}/src )",
         "include_directories( ${GTEST_INCLUDES} )",
-        "file(GLOB {}_TEST_SOURCES ./*.cpp ./*.c ./*.cxx )".format(lib_name.upper()),
+        files,
         "",
         "add_executable( {}_test".format(lib_name),
         "    ${{{}_TEST_SOURCES}}".format(lib_name.upper()),
@@ -37,16 +41,20 @@ def build_lines_for_test_cmake(lib_name):
     return lines
 
 
-def build_lines_for_lib(lib_name):
-    # TODO let this change to explicit
-    glob_template = "file( GLOB {} ./*.cpp ./*.c ./*.cxx )"
+def build_lines_for_lib(lib_name, no_glob):
+    srcs_template = "file( GLOB {} ./*.cpp ./*.c ./*.cxx )"
     add_lib_template = "add_library( {} ${{{}}} )"
 
-    glob_name = '{}_SRC'.format(lib_name.upper())
+    srcs_name = '{}_SRC'.format(lib_name.upper())
+
+    if no_glob:
+        srcs_template = "set( {{}}\n    {}.cpp\n    # Add new source files here\n)".format(lib_name)
 
     lines = [
-        glob_template.format(glob_name),
-        add_lib_template.format(lib_name, glob_name),
+        srcs_template.format(srcs_name),
+        "",
+        add_lib_template.format(lib_name, srcs_name),
+        "",
         "add_subdirectory( tests )"
     ]
 
@@ -68,13 +76,13 @@ def main():
     args = tf.parse_args(True)
     lib_name = args.name
 
-    lines = build_lines_for_lib(lib_name)
+    lines = build_lines_for_lib(lib_name, args.no_glob)
     tf.create_cmakelists_for_target_under(lib_name, "src", lines)
     tf.create_file_in_target_under(lib_name, "src", ["#pragma once"], "{}.h".format(lib_name))
     cpp_lines = ['#include "{}.h"'.format(lib_name)]
     tf.create_file_in_target_under(lib_name, "src", cpp_lines, "{}.cpp".format(lib_name))
 
-    test_lines = build_lines_for_test_cmake(lib_name)
+    test_lines = build_lines_for_test_cmake(lib_name, args.no_glob)
     tf.create_cmakelists_for_target_under("tests", "src/{}".format(lib_name), test_lines)
 
     unit_test_lines = build_lines_for_test(lib_name)
