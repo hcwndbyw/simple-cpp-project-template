@@ -117,6 +117,15 @@ def parse_args(is_lib):
                         This will apply that link interface and dependency to that library. For example:\
                         \t-l foo pri:bar PUBLIC:baz int:ham')
 
+    if is_lib:
+        parser.add_argument('-static', dest='lib_type',
+                            action='store_const', const=' STATIC', default='',
+                            help='If set, specifies that this lib should be a static library.')
+
+        parser.add_argument('-shared', dest='lib_type',
+                            action='store_const', const=' SHARED', default='',
+                            help='If set, specifies that this lib should be a shared library.')
+
     args = parser.parse_args()
 
     args.name = args.name[0].lower()

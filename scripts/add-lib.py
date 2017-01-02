@@ -41,9 +41,9 @@ def build_lines_for_test_cmake(lib_name, no_glob):
     return lines
 
 
-def build_lines_for_lib(lib_name, no_glob, to_link):
+def build_lines_for_lib(lib_name, no_glob, to_link, lib_type):
     srcs_template = "file( GLOB {} ./*.cpp ./*.c ./*.cxx )"
-    add_lib_template = "add_library( {} ${{{}}} )"
+    add_lib_template = "add_library( {}{} ${{{}}} )"
 
     srcs_name = '{}_SRC'.format(lib_name.upper())
 
@@ -53,7 +53,7 @@ def build_lines_for_lib(lib_name, no_glob, to_link):
     lines = [
         srcs_template.format(srcs_name),
         "",
-        add_lib_template.format(lib_name, srcs_name),
+        add_lib_template.format(lib_name, lib_type, srcs_name),
         "",
         "add_subdirectory( tests )"
     ]
@@ -78,7 +78,7 @@ def main():
     args = tf.parse_args(True)
     lib_name = args.name
 
-    lines = build_lines_for_lib(lib_name, args.no_glob, args.to_link)
+    lines = build_lines_for_lib(lib_name, args.no_glob, args.to_link, args.lib_type)
     tf.create_cmakelists_for_target_under(lib_name, "src", lines)
     tf.create_file_in_target_under(lib_name, "src", ["#pragma once"], "{}.h".format(lib_name))
     cpp_lines = ['#include "{}.h"'.format(lib_name)]
